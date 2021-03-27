@@ -137,16 +137,16 @@ The final rule therefore looks like this:
 cc_library(
     name = "main",
     srcs = glob(
-        ["googletest-release-1.10.0/src/*.cc"],
-        exclude = ["googletest-release-1.10.0/src/gtest-all.cc"]
+        ["googletest-release-1.10.0/googletest/src/*.cc"],
+        exclude = ["googletest-release-1.10.0/googletest/src/gtest-all.cc"]
     ),
     hdrs = glob([
-        "googletest-release-1.10.0/include/**/*.h",
-        "googletest-release-1.10.0/src/*.h"
+        "googletest-release-1.10.0/googletest/include/**/*.h",
+        "googletest-release-1.10.0/googletest/src/*.h"
     ]),
     copts = [
-        "-Iexternal/gtest/googletest-release-1.10.0/include",
-        "-Iexternal/gtest/googletest-release-1.10.0"
+        "-Iexternal/gtest/googletest-release-1.10.0/googletest/include",
+        "-Iexternal/gtest/googletest-release-1.10.0/googletest"
     ],
     linkopts = ["-pthread"],
     visibility = ["//visibility:public"],
@@ -175,14 +175,17 @@ Then `gtest.BUILD` would look like this:
 cc_library(
     name = "main",
     srcs = glob(
-        ["src/*.cc"],
-        exclude = ["src/gtest-all.cc"]
+        ["googletest/src/*.cc"],
+        exclude = ["googletest/src/gtest-all.cc"]
     ),
     hdrs = glob([
-        "include/**/*.h",
-        "src/*.h"
+        "googletest/include/**/*.h",
+        "googletest/src/*.h"
     ]),
-    copts = ["-Iexternal/gtest/include"],
+    copts = [
+        "-Iexternal/gtest/googletest/include",
+        "-Iexternal/gtest/googletest",
+    ],
     linkopts = ["-pthread"],
     visibility = ["//visibility:public"],
 )
@@ -209,7 +212,7 @@ Then create `./test/BUILD` file for your tests:
 cc_test(
     name = "hello-test",
     srcs = ["hello-test.cc"],
-    copts = ["-Iexternal/gtest/include"],
+    copts = ["-Iexternal/gtest/googletest/include"],
     deps = [
         "@gtest//:main",
         "//main:hello-greet",
